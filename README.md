@@ -111,9 +111,9 @@ curl http://localhost:8080
 
 Ожидаемый ответ:
 
-```
+```bash
 Hello from Effective Mobile!
-
+```
 ---
 
 # Полезные команды
