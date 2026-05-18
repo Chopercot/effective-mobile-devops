@@ -1,48 +1,48 @@
 # Effective Mobile - DevOps Test Project
 
-Небольшой демонстрационный проект, показывающий работу **Python HTTP-сервера (backend)** за обратным прокси **Nginx**, запущенных в контейнерах Docker.
+A small demonstration project showcasing a **Python HTTP server (backend)** running behind an **Nginx reverse proxy**, both deployed inside Docker containers.
 
-Проект демонстрирует базовые практики контейнеризации:
+The project demonstrates core containerization best practices:
 
-- использование `docker-compose`
-- разделение сервисов (1 процесс = 1 контейнер)
-- использование `.env` для конфигурации
-- изолированная docker-сеть
-- чистый минимальный образ backend
-
----
-
-# Архитектура
-
-```
-
-           Browser / Client
-                 │
-                 │ HTTP
-                 ▼
-          ┌────────────┐
-          │   Nginx    │
-          │ (reverse   │
-          │   proxy)   │
-          └─────┬──────┘
-                │
-                │ proxy_pass
-                ▼
-          ┌────────────┐
-          │  Backend   │
-          │  Python    │
-          │ HTTP server│
-          │    :8080   │
-          └────────────┘     
-```
-
-**Nginx** принимает HTTP-запросы и проксирует их в **приложение**.
-
-Все сервисы работают внутри **отдельной docker-сети**.
+- Utilizing `docker-compose`
+- Service separation (1 process = 1 container)
+- Using a `.env` file for configuration
+- Isolated Docker network
+- Clean, minimal backend image
 
 ---
 
-# Используемые технологии
+# Architecture
+
+```
+
+        Browser / Client
+               │
+               │ HTTP
+               ▼
+     ┌────────────┐
+     │   Nginx    │
+     │ (reverse   │
+     │   proxy)   │
+     └─────┬──────┘
+           │
+           │ proxy_pass
+           ▼
+     ┌────────────┐
+     │  Backend   │
+     │  Python    │
+     │ HTTP server│
+     │   :8080    │
+     └────────────┘     
+```
+
+**Nginx** accepts HTTP requests and proxies them to the **application**.
+
+All services run within an **isolated Docker network**.
+
+---
+
+# Tech Stack
 
 * Docker
 * Docker Compose
@@ -52,31 +52,31 @@
 
 ---
 
-# Структура проекта
+# Project Structure
 
 ```
 
 effective-mobile-devops/
-├── backend/                     # backend-сервис (Python HTTP сервер)
-│   ├── Dockerfile               # Dockerfile для backend
-│   └── app.py                   # основной код приложения
+├── backend/                     # Backend service (Python HTTP server)
+│   ├── Dockerfile               # Dockerfile for the backend
+│   └── app.py                   # Main application code
 │
 ├── nginx/                       # Nginx (reverse proxy)
-│   └── nginx.conf               # конфигурация Nginx
+│   └── nginx.conf               # Nginx configuration file
 │
-├── .dockerignore                # файлы, которые не должны попасть в Docker образ
-├── .env                         # переменные окружения для docker-compose
-├── docker-compose.yml           # конфигурация для запуска всех контейнеров
-├── README.md                    # инструкции, проверка и описание архитектуры
+├── .dockerignore                # Files excluded from the Docker image
+├── .env                         # Environment variables for docker-compose
+├── docker-compose.yml           # Configuration to spin up all containers
+├── README.md                    # Instructions, verification, and architecture overview
 |
-└── .gitignore                   # файлы, которые не нужно коммитить
+└── .gitignore                   # Git ignored files
 
 ```
 ---
 
-# Переменные окружения
+# Environment Variables
 
-Файл `.env`:
+`.env` file:
 
 ```
 NGINX_PORT=8080
@@ -84,67 +84,61 @@ NGINX_PORT=8080
 
 ---
 
-# Запуск проекта
+# Getting Started
 
-### 1. Клонировать репозиторий
-
-```bash
+### 1. Clone the repository
+```Bash
 git clone <repo_url>
 cd project
 ```
 
-### 2. Запустить контейнеры
-
-```bash
+### 2. Start the containers
+```Bash
 docker compose up --build
 ```
 
 ---
 
-# Проверка работы
+# Verification
+Verify using curl:
 
-Через curl:
-
-```bash
+```Bash
 curl http://localhost:8080
 ```
+Expected response:
 
-Ожидаемый ответ:
-
-```bash
+```Bash
 Hello from Effective Mobile!
 ```
 ---
 
-# Полезные команды
+# Useful Commands
 
-Посмотреть контейнеры:
+View running containers:
 
-```bash
+```Bash
 docker ps
 ```
 
-Посмотреть логи:
+View logs:
 
-```bash
+```Bash
 docker compose logs
 ```
 
-Остановить контейнеры:
+Stop containers:
 
-```bash
+```Bash
 docker compose down
 ```
 
----
+# Key Features & Implementation Details
 
-# Особенности реализации
-
-✔ Nginx используется как **reverse proxy**
-✔ Приложение работает в отдельном контейнере
-✔ контейнеры объединены **в отдельную docker-сеть**
-✔ используются **переменные окружения через `.env`**
-✔ каждый контейнер запускает **один процесс**
-✔ Backend контейнер запускается от non-root пользователя
-✔ Backend сервис не доступен напрямую извне
-✔ Доступ к приложению осуществляется только через Nginx
+✔ Nginx acts as a **reverse proxy**
+✔ The application runs in a separate container
+✔ Containers are joined in **an isolated Docker network**
+✔ Configurations are managed **via environment variables in a .env file**
+✔ Each container runs a **single process**
+✔ The backend container runs under a non-root user
+✔ The backend service is not directly accessible from the outside
+✔ Access to the application is routed exclusively through Nginx
